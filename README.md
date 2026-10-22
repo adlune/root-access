@@ -1,15 +1,15 @@
 # ROOT_ACCESS
 
-A Hacknet-lite terminal hacking game for Android, built twice: once in **Flutter** and once in **React Native**, so the two frameworks can be compared.
+A terminal hacking game for Android, built twice: once in **Flutter** and once in **React Native**, so the two frameworks can be compared.
 
-You play a rookie hacker at a terminal. You scan a fictional network, connect to machines, read files, crack ports and complete missions from your inbox. Everything is simulated: the app never makes real network requests.
+You play a rookie hacker at a terminal. You scan a fictional network, connect to machines, read files, crack ports and complete missions from your inbox. Everything is simulated.
 
 ## Repository layout
 | Path | What |
 |---|---|
 | `flutter_app/` | Flutter version (Dart), green theme |
 | `rn_app/` | React Native version (Expo + TypeScript), amber theme |
-| `shared/missions.json` | All game content. **Edit missions here only.** |
+| `shared/missions.json` | All game content. |
 | `scripts/sync-missions.mjs` | Copies `shared/missions.json` into both apps |
 
 ## Prerequisites
@@ -40,4 +40,4 @@ node scripts/sync-missions.mjs
 ```
 
 ## License
-[MIT](LICENSE) © 2026 Adrian Lara
+This project is licensed under [MIT](License)
