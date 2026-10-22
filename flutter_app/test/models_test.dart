@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:root_access/engine/models.dart';
 
+import 'test_data.dart';
+
 void main() {
-  // Tests run from the package root, so this reads the real game content.
-  final data = GameData.fromJson(
-    jsonDecode(File('assets/missions.json').readAsStringSync()) as Json,
-  );
+  final data = loadGameData();
 
   test('loads all missions in order', () {
     expect(data.missions.map((m) => m.id), [

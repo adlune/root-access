@@ -7,8 +7,8 @@ You play a rookie hacker at a terminal. You scan a fictional network, connect to
 ## Repository layout
 | Path | What |
 |---|---|
-| `flutter_app/` | Flutter version (Dart), green theme |
-| `rn_app/` | React Native version (Expo + TypeScript), amber theme |
+| `flutter_app/` | Flutter version (Dart), black & white theme |
+| `rn_app/` | React Native version (Expo + TypeScript), black & white theme |
 | `shared/missions.json` | All game content. |
 | `scripts/sync-missions.mjs` | Copies `shared/missions.json` into both apps |
 

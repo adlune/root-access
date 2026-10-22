@@ -1,5 +1,5 @@
-// Shape of assets/missions.json (copied from shared/missions.json).
-// Keep in sync with flutter_app/lib/engine/models.dart.
+// Port of flutter_app/lib/engine/models.dart: the shape of assets/missions.json
+// (copied from shared/missions.json). TypeScript needs only types, no parsing code.
 
 export type VirtualFile = {
   path: string; // absolute, e.g. "/home/readme.txt"
