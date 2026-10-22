@@ -1,23 +1,220 @@
 {
   "version": 1,
+  "player": { "user": "rookie", "hostname": "localhost" },
+
+  "commands": [
+    { "name": "help", "usage": "help", "description": "List all commands." },
+    { "name": "mail", "usage": "mail", "description": "Show the current mission email." },
+    { "name": "hint", "usage": "hint", "description": "Get a nudge for the current mission." },
+    { "name": "scan", "usage": "scan", "description": "Find machines on the network." },
+    { "name": "connect", "usage": "connect <ip>", "description": "Connect to a machine." },
+    { "name": "disconnect", "usage": "disconnect", "description": "Return to your own machine." },
+    { "name": "probe", "usage": "probe", "description": "List the open ports on the connected machine." },
+    { "name": "crack", "usage": "crack <port>", "description": "Try to break the lock on a port." },
+    { "name": "login", "usage": "login <user> <password>", "description": "Unlock a machine with credentials." },
+    { "name": "ls", "usage": "ls", "description": "List files in the current folder." },
+    { "name": "cd", "usage": "cd <folder>", "description": "Change folder. 'cd ..' goes up." },
+    { "name": "cat", "usage": "cat <file>", "description": "Print a file." },
+    { "name": "grep", "usage": "grep <word> <file>", "description": "Print only the lines of a file that contain a word." },
+    { "name": "download", "usage": "download <file>", "description": "Copy a file to your machine." },
+    { "name": "report", "usage": "report <answer>", "description": "Send your answer to the client." },
+    { "name": "learn", "usage": "learn <topic>", "description": "Learn the real-world idea behind the game. Try 'learn' alone for topics." },
+    { "name": "clear", "usage": "clear", "description": "Clear the screen." }
+  ],
+
+  "topics": {
+    "ip": [
+      "An IP address identifies a machine on a network, like a street address.",
+      "10.x.x.x, 172.16-31.x.x and 192.168.x.x are private ranges used inside companies and homes.",
+      "The game's public-looking IPs (192.0.2.x, 198.51.100.x, 203.0.113.x) are reserved for documentation, so they never belong to anyone real."
+    ],
+    "scan": [
+      "Scanning finds which machines are alive and which ports they have open.",
+      "The real-world tool is nmap. Only scan networks you own or have written permission to test."
+    ],
+    "ports": [
+      "A port is a numbered door on a machine. Each service listens on its own port.",
+      "Common ones: 21 FTP (file transfer), 22 SSH (remote shell), 80 HTTP (web), 443 HTTPS (secure web).",
+      "Every open port is a possible way in, so admins close the ones they don't need."
+    ],
+    "ssh": [
+      "SSH (port 22) gives you a remote command line on a machine.",
+      "Well-run servers block password guessing on SSH, so attackers look for stolen or reused passwords instead."
+    ],
+    "ftp": [
+      "FTP (port 21) is an old file-transfer protocol. It sends passwords in plain text.",
+      "Forgotten FTP servers full of old backups are a classic weak spot."
+    ],
+    "passwords": [
+      "Password reuse means one leak opens many doors: if a password leaks from one system, attackers try it everywhere else.",
+      "Defenses: a unique password per system, a password manager, and multi-factor authentication."
+    ],
+    "trace": [
+      "In the game, a trace is the target's security noticing you. In real life it's an intrusion detection system (IDS) raising an alert.",
+      "Real attackers try to stay quiet; defenders try to shorten the time before they're noticed."
+    ],
+    "logs": [
+      "Servers write logs: timestamped lines recording what happened, like logins.",
+      "Defenders (the blue team) search logs for patterns, such as many failed logins from one IP followed by a success. That pattern is a brute-force attack."
+    ],
+    "bruteforce": [
+      "A brute-force attack tries many passwords until one works.",
+      "It leaves a loud trail of failed logins in the logs. Lockouts and rate limits stop it."
+    ]
+  },
+
   "missions": [
     {
       "id": "m1_hello_world",
       "title": "Hello, World",
       "sender": "bit@entropy.net",
-      "brief": "Welcome, rookie. Scan the network, connect to the practice server and download welcome.txt.",
+      "subject": "Welcome to Entropy",
+      "body": [
+        "Welcome, rookie.",
+        "Entropy takes on authorized security jobs. Before you get real work, show me you can drive a terminal.",
+        "1. Run 'scan' to find machines on the network.",
+        "2. 'connect' to the practice server.",
+        "3. Look around with 'ls' and 'cat'.",
+        "4. 'download' welcome.txt.",
+        "- bit"
+      ],
+      "hint": "Type 'scan', then 'connect 10.0.0.5'. Use 'ls' and 'cd home' to find the files.",
       "nodes": [
         {
           "ip": "10.0.0.5",
           "hostname": "practice-srv",
-          "ports": [22, 80],
+          "ports": [
+            { "number": 22, "service": "ssh" },
+            { "number": 80, "service": "http" }
+          ],
+          "lock": null,
+          "traceSeconds": 0,
           "files": [
-            { "path": "/home/readme.txt", "content": "If you can read this, you're in." },
-            { "path": "/home/welcome.txt", "content": "Download me to finish the tutorial." }
+            {
+              "path": "/home/readme.txt",
+              "lines": ["If you can read this, you're in.", "Now download welcome.txt."]
+            },
+            {
+              "path": "/home/welcome.txt",
+              "lines": ["Nice work. Tutorial complete.", "Check your mail for your first real job."]
+            }
           ]
         }
       ],
       "objective": { "type": "download", "ip": "10.0.0.5", "path": "/home/welcome.txt" }
+    },
+
+    {
+      "id": "m2_credential_reuse",
+      "title": "Credential Reuse",
+      "sender": "bit@entropy.net",
+      "subject": "Job: Kestrel Logistics pentest",
+      "body": [
+        "Kestrel Logistics hired us to test their security. You have written permission.",
+        "Goal: prove you can get into kestrel-ssh (10.0.2.10) by downloading /root/flag.txt.",
+        "Their SSH is hardened, so cracking it won't work. Look for another way in.",
+        "Rumor says their old backup server is still online.",
+        "Careful: kestrel-ssh will trace you. Plan before you connect.",
+        "- bit"
+      ],
+      "hint": "Crack the FTP port on old-backup, read its files, then use 'login' on kestrel-ssh.",
+      "nodes": [
+        {
+          "ip": "10.0.2.44",
+          "hostname": "old-backup",
+          "ports": [
+            { "number": 21, "service": "ftp" },
+            { "number": 80, "service": "http" }
+          ],
+          "lock": { "port": 21, "crackable": true, "user": null, "password": null },
+          "traceSeconds": 0,
+          "files": [
+            {
+              "path": "/backup/passwords.bak",
+              "lines": [
+                "# kestrel admin creds - DO NOT SHARE",
+                "svc_backup  Summer2019!",
+                "jmorgan     Kestrel#2024"
+              ]
+            },
+            {
+              "path": "/backup/notes.txt",
+              "lines": ["Reminder: James uses the same password everywhere. Fix this!", "- IT"]
+            }
+          ]
+        },
+        {
+          "ip": "10.0.2.10",
+          "hostname": "kestrel-ssh",
+          "ports": [{ "number": 22, "service": "ssh" }],
+          "lock": { "port": 22, "crackable": false, "user": "jmorgan", "password": "Kestrel#2024" },
+          "traceSeconds": 45,
+          "files": [
+            {
+              "path": "/root/flag.txt",
+              "lines": ["FLAG{reused_passwords_are_open_doors}"]
+            }
+          ]
+        }
+      ],
+      "objective": { "type": "download", "ip": "10.0.2.10", "path": "/root/flag.txt" }
+    },
+
+    {
+      "id": "m3_log_detective",
+      "title": "Log Detective",
+      "sender": "ops@harborcoffee.net",
+      "subject": "URGENT: someone got into our shop server",
+      "body": [
+        "Hi, we're Harbor Coffee. bit said you could help.",
+        "Our admin account was used at 03:12 last night, and none of us did it.",
+        "You have access to shop-web (172.16.4.20). The login log is /var/log/auth.log.",
+        "Find the attacker's IP and 'report' it so we can block it.",
+        "- Dana, Harbor Coffee"
+      ],
+      "hint": "Try 'grep Failed /var/log/auth.log'. Which IP shows up again and again?",
+      "nodes": [
+        {
+          "ip": "172.16.4.20",
+          "hostname": "shop-web",
+          "ports": [
+            { "number": 22, "service": "ssh" },
+            { "number": 443, "service": "https" }
+          ],
+          "lock": null,
+          "traceSeconds": 0,
+          "files": [
+            {
+              "path": "/var/log/auth.log",
+              "lines": [
+                "Oct 21 01:14:09 shop-web sshd[1987]: Accepted password for dana from 10.4.0.12 port 50211",
+                "Oct 21 01:40:52 shop-web sshd[2003]: Failed password for root from 198.51.100.23 port 33410",
+                "Oct 21 02:05:31 shop-web sshd[2041]: Failed password for barista from 10.4.0.15 port 51877",
+                "Oct 21 02:05:44 shop-web sshd[2042]: Accepted password for barista from 10.4.0.15 port 51880",
+                "Oct 21 03:02:14 shop-web sshd[2291]: Failed password for admin from 203.0.113.77 port 40112",
+                "Oct 21 03:02:19 shop-web sshd[2292]: Failed password for admin from 203.0.113.77 port 40118",
+                "Oct 21 03:02:25 shop-web sshd[2294]: Failed password for admin from 203.0.113.77 port 40127",
+                "Oct 21 03:03:02 shop-web sshd[2301]: Failed password for admin from 203.0.113.77 port 40140",
+                "Oct 21 03:03:40 shop-web sshd[2310]: Failed password for admin from 203.0.113.77 port 40166",
+                "Oct 21 03:04:11 shop-web sshd[2318]: Invalid user test from 192.0.2.50 port 60001",
+                "Oct 21 03:04:57 shop-web sshd[2325]: Failed password for admin from 203.0.113.77 port 40191",
+                "Oct 21 03:06:30 shop-web sshd[2349]: Failed password for admin from 203.0.113.77 port 40230",
+                "Oct 21 03:08:03 shop-web sshd[2371]: Failed password for admin from 203.0.113.77 port 40284",
+                "Oct 21 03:09:45 shop-web sshd[2390]: Failed password for admin from 203.0.113.77 port 40319",
+                "Oct 21 03:11:20 shop-web sshd[2412]: Failed password for admin from 203.0.113.77 port 40355",
+                "Oct 21 03:12:06 shop-web sshd[2420]: Accepted password for admin from 203.0.113.77 port 40371",
+                "Oct 21 03:15:48 shop-web sshd[2433]: Failed password for root from 198.51.100.23 port 33502",
+                "Oct 21 07:58:12 shop-web sshd[2604]: Accepted password for dana from 10.4.0.12 port 50340"
+              ]
+            },
+            {
+              "path": "/home/dana/todo.txt",
+              "lines": ["- change admin password (it's still 'coffee123')", "- order more oat milk"]
+            }
+          ]
+        }
+      ],
+      "objective": { "type": "report", "answer": "203.0.113.77" }
     }
   ]
 }

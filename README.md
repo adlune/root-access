@@ -30,9 +30,9 @@ React Native:
 ```bash
 cd rn_app
 npm install
-npx expo start
+npm run android
 ```
-Then press `a` in the Expo terminal to open the app on the emulator.
+This starts the Expo dev server and opens the app in Expo Go on the emulator. It runs in localhost mode over adb, so Windows Firewall can't block it.
 
 After editing missions:
 ```bash
@@ -40,4 +40,4 @@ node scripts/sync-missions.mjs
 ```
 
 ## License
-This project is licensed under [MIT](License)
+This project is licensed under [MIT](LICENSE)

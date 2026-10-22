@@ -5,8 +5,10 @@ Expo (SDK 58) + TypeScript + Expo Router. Amber terminal theme.
 ## Run
 ```bash
 npm install
-npx expo start     # then press "a" to open the Android emulator
+npm run android    # with the Android emulator running
 ```
+
+`npm run android` runs Expo in `--localhost` mode, so the emulator reaches the dev server through adb instead of your network, which Windows Firewall may block. `.npmrc` makes Node prefer IPv4 so that tunnel can connect. If Expo Go shows "Something went wrong / Failed to download remote update", you probably ran plain `npx expo start`.
 
 ## Layout
 - `src/app/`: screens (file-based routing): `index` (boot), `terminal`, `inbox`
