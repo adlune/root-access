@@ -1,0 +1,20 @@
+# Each app has its own .gitignore (flutter_app/.gitignore, rn_app/.gitignore).
+# This file covers the repository root, plus a few patterns that apply everywhere.
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+
+# Node (in case scripts/ ever get dependencies)
+node_modules/
+
+# Agents
+.claude/
+.mcp.json
+
+# Documentation
+*.md
+!README.md

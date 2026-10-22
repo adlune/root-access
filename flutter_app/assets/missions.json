@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "missions": [
+    {
+      "id": "m1_hello_world",
+      "title": "Hello, World",
+      "sender": "bit@entropy.net",
+      "brief": "Welcome, rookie. Scan the network, connect to the practice server and download welcome.txt.",
+      "nodes": [
+        {
+          "ip": "10.0.0.5",
+          "hostname": "practice-srv",
+          "ports": [22, 80],
+          "files": [
+            { "path": "/home/readme.txt", "content": "If you can read this, you're in." },
+            { "path": "/home/welcome.txt", "content": "Download me to finish the tutorial." }
+          ]
+        }
+      ],
+      "objective": { "type": "download", "ip": "10.0.0.5", "path": "/home/welcome.txt" }
+    }
+  ]
+}
