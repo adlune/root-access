@@ -11,8 +11,6 @@ You play a rookie hacker at a terminal. You scan a fictional network, connect to
 | `rn_app/` | React Native version (Expo + TypeScript), amber theme |
 | `shared/missions.json` | All game content. **Edit missions here only.** |
 | `scripts/sync-missions.mjs` | Copies `shared/missions.json` into both apps |
-| `docs/PLAN.md` | Project plan and schedule |
-| `docs/comparison.md` | Flutter vs React Native notes for the write-up |
 
 ## Prerequisites
 - Flutter SDK (`flutter doctor` all green for Android)
@@ -40,3 +38,6 @@ After editing missions:
 ```bash
 node scripts/sync-missions.mjs
 ```
+
+## License
+[MIT](LICENSE) © 2026 Adrian Lara
